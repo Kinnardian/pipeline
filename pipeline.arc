@@ -1,13 +1,10 @@
 
 
 (= defaultDir "/pipelines/")
-(deftem pipeline)
 	(def createPipeline (name stacks)
 		(prn "Creating new pipeline: " name)
 		(prn "with stacks: " stacks)
-		(save-file (list name stacks) (string (pwd) defaultDir name))
-		#|(for stacks s
-			createStack(s))|#
+		(save-file stacks (string (pwd) defaultDir name))
 		(repl)
 	)
 	(def listPipelines (pipelineLocation)
