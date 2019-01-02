@@ -26,8 +26,8 @@
 					(if stack
 						(prn "need to figure out how to insert into a particular stack: " stack)
 						((prn "No stack provided") 
-							(tofile (string (pwd) defaultDir pipeline ".tmp") (write (fromfile (string (pwd) defaultDir pipeline) (push (caar (cdr (read))) i))))
-							(repl)))))
+							(tofile (string (pwd) defaultDir pipeline ".tmp") (write (let s (fromfile (string (pwd) defaultDir pipeline) (read)) (nappend (car s) i) s)))
+							(repl))))
 				(prn "Try again: supply an item"))
 		(def getItem (nameOrId)
 			(prn "getting item"))
