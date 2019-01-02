@@ -1,0 +1,43 @@
+#!/usr/bin/env arc.sh
+
+(when (< len.argv 4)
+  (ero "usage: pipeline <name> <command> <args>...")
+  (ero "perform the given command with the given <args> on the file pipelines/<name>")
+  (ero "the meaning of and permitted values in <args> will depend on the <command>")
+  (quit))
+
+; commands
+(def show (filename)
+  (fromfile filename
+    (whiler column (read) eof
+      (let (column-name . items) column
+        (prn "--- " column-name)
+        (each item items
+          (prn item))))))
+
+(def add (filename column-name item)
+  (tofile filename
+    (fromfile filename
+      (whiler column (read) eof
+        (let (name . items) column
+;?           (ero "checking column " name)
+          (when (iso name column-name)
+;?             (ero "appending")
+            (nappend column item))
+          (write column)
+          (prn))))))
+
+; run a command
+(let (pipeline-name command . args) cdr.argv
+  (= filename (+ "pipelines/" pipeline-name))
+
+  (case command
+    "add" (apply add filename args)
+    "show" nil
+    ; else
+      (ero "unknown command " command))
+
+  (when (file-exists filename)
+    (show filename))
+
+)
