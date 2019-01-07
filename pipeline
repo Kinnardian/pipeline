@@ -52,7 +52,7 @@
     	;(prn "arguments: " cdr.expr)
 	    (case command
 	    	"createPipeline" (createPipeline (args 0) (cdr args))
-	        "listPipelines" (listPipelines args)
+	        "listPipelines" (listPipelines car.args)
 	        "getPipeline" (getPipeline (args 0))
 	        "createStack" (prn "unimplement")
 	        "getStack" (prn "unimplemented")
