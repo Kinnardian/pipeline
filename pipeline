@@ -26,7 +26,7 @@
 				(fromfile pipeline-loc
 				  (whiler stack (read) eof
 				    (let (name . items) stack
-				      (ero "checking column " name)
+				      (ero "checking stack " name)
 				      (when (iso name stack-name)
 				         (ero "appending")
 				        (nappend stack i))
@@ -52,8 +52,8 @@
 	        "createItem" (createItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
 	        "getItem" (prn "unimplemented :(")
 	        "moveItem" (prn "unimplemented :(")
-	        ((ero "command not found")
-	        (ero "usage: pipeline <name> <command> <args>...")
+	        (do (ero "command not found")
+	        (ero "usage: pipeline <command> <args>...")
 	        (prepl)))))
 (def prepl ()
     (disp "\npipeline< ")
