@@ -12,7 +12,14 @@
 			(pr (dir pipelineLocation))
 			(pr (dir defaultDir)))
 		(prepl))
-	;(def getPipeline (name))
+	(def getPipeline (name)
+  		(fromfile (+ defaultDir name)
+    		(whiler stack (read) eof
+      			(let (stack-name . items) stack
+        			(prn "--- " stack-name)
+        			(each item items
+          			(prn item)))))
+  		(prepl))
 	;stacks
 	;	(def createStack (name))
 	;	(def getStack(name))
@@ -46,7 +53,7 @@
 	    (case command
 	    	"createPipeline" (createPipeline (args 0) (cdr args))
 	        "listPipelines" (listPipelines (argv 1))
-	        "getPipeline" (getPipeline argv 1)
+	        "getPipeline" (getPipeline (args 0))
 	        "createStack" (prn "unimplement")
 	        "getStack" (prn "unimplemented")
 	        "createItem" (createItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
