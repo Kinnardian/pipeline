@@ -1,0 +1,68 @@
+#!/usr/bin/env arc
+
+(= defaultDir "./pipelines/")
+	(def createPipeline (name stacks)
+		;(ero "Creating new pipeline: " name)
+		;(ero "with stacks: " stacks)
+		(tofile (string (pwd) defaultDir name) (each n stacks (write (list n))))
+		(prepl))
+	(def listPipelines (pipelineLocation)
+		(prn "listing pipelines")
+		(if pipelineLocation 
+			(pr (dir pipelineLocation))
+			(pr (dir defaultDir)))
+		(prepl))
+	;(def getPipeline (name))
+	;stacks
+	;	(def createStack (name))
+	;	(def getStack(name))
+
+	;items
+
+	(def createItem (pipeline-loc stack-name i)
+		;(prn "Stackname: " stack-name " item: " i)
+		(if i
+			(tofile pipeline-loc
+				(fromfile pipeline-loc
+				  (whiler stack (read) eof
+				    (let (name . items) stack
+				      (ero "checking column " name)
+				      (when (iso name stack-name)
+				         (ero "appending")
+				        (nappend stack i))
+				      (write stack)
+				      (prn)))))
+			(ero "You didn't supply an item")))
+	;	(def getItem (nameOrId))
+	;	(def deleteItem (item))
+
+	;movements
+	;	(def moveItem (item))
+
+(def pipelineval (expr)
+	(= expr (re-match* (pre "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'") expr))
+    ;(prn "command: " (car expr))
+    ;(prn "arguments: " cdr.expr)
+    (let (command . args) expr
+	    (case command
+	    	"createPipeline" (createPipeline (args 0) (cdr args))
+	        "listPipelines" (listPipelines (argv 1))
+	        "getPipeline" (getPipeline argv 1)
+	        "createStack" (prn "unimplement")
+	        "getStack" (prn "unimplemented")
+	        "createItem" (createItem (+ defaultDir (args 0)) (args 1) (args 2))
+	        "getItem" (prn "unimplemented :(")
+	        "moveItem" (prn "unimplemented :(")
+	        ((ero "command not found")
+	        (ero "usage: pipeline <name> <command> <args>...")
+	        (prepl)))))
+(def prepl ()
+    (disp "\npipeline< ")
+    (= expr (readline))
+    (pipelineval expr))
+
+(def topLevel (argv)
+    (case cdr.argv
+    	nil (prepl)
+	    (pipelineval cdr.argv)))
+(topLevel argv)
