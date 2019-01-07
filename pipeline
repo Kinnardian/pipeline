@@ -40,17 +40,16 @@
 	;	(def moveItem (item))
 
 (def pipelineval (expr)
-	(= expr (re-match* (pre "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'") expr))
-    ;(prn "command: " (car expr))
-    ;(prn "arguments: " cdr.expr)
-    (let (command . args) expr
+    (let (command . args) (tokens expr)
+    	;(prn "command: " (car expr))
+    	;(prn "arguments: " cdr.expr)
 	    (case command
 	    	"createPipeline" (createPipeline (args 0) (cdr args))
 	        "listPipelines" (listPipelines (argv 1))
 	        "getPipeline" (getPipeline argv 1)
 	        "createStack" (prn "unimplement")
 	        "getStack" (prn "unimplemented")
-	        "createItem" (createItem (+ defaultDir (args 0)) (args 1) (args 2))
+	        "createItem" (createItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
 	        "getItem" (prn "unimplemented :(")
 	        "moveItem" (prn "unimplemented :(")
 	        ((ero "command not found")
