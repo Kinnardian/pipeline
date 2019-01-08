@@ -52,9 +52,9 @@
     	;(prn "command: " (car expr))
     	;(prn "arguments: " cdr.expr)
 	    (case command
-	    	"createPipeline" (createPipeline (args 0) (cdr args))
+	    	"createPipeline" (createPipeline car.args cdr.args)
 	        "listPipelines" (listPipelines car.args)
-	        "getPipeline" (getPipeline (args 0))
+	        "getPipeline" (getPipeline car.args)
 	        "createStack" (prn "unimplement")
 	        "getStack" (prn "unimplemented")
 	        "createItem" (createItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
