@@ -42,7 +42,15 @@
 			(prepl))
 			(ero "You didn't supply an item")))
 	;	(def getItem (nameOrId))
-	;	(def deleteItem (item))
+	(def deleteItem (pipeline-loc stack-name d)
+		(tofile pipeline-loc
+			(fromfile pipeline-loc
+				(whiler stack (read) eof
+					(let (name . items) stack
+						(ero "checking stack " name)
+						(pull [is _ d] stack)
+						(write stack)))))
+		(prepl))
 
 	;movements
 	;	(def moveItem (item))
@@ -59,7 +67,9 @@
 	        "getStack" (prn "unimplemented")
 	        "createItem" (createItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
 	        "getItem" (prn "unimplemented :(")
+	        "deleteItem" (deleteItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
 	        "moveItem" (prn "unimplemented :(")
+
 	        (do (ero "command not found")
 	        (ero "usage: pipeline <command> <args>...")
 	        (prepl)))))
