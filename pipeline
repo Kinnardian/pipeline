@@ -1,78 +1,78 @@
 #!/usr/bin/env arc
 
 (= defaultDir "./pipelines/")
-	(def createPipeline (name stacks)
-		;(ero "Creating new pipeline: " name)
-		;(ero "with stacks: " stacks)
-		(tofile (string (pwd) defaultDir name) (each n stacks (write (list n))))
-		(prepl))
-	(def listPipelines (pipelineLocation)
-		(prn "listing pipelines")
-		(if pipelineLocation 
-			(pr (dir pipelineLocation))
-			(pr (dir defaultDir)))
-		(prepl))
-	(def getPipeline (name)
-  		(fromfile (+ defaultDir name)
-    		(whiler stack (read) eof
-      			(let (stack-name . items) stack
-        			(prn "--- " stack-name)
-        			(each item items
-          			(prn item)))))
-  		(prepl))
-	;stacks
-	;	(def createStack (name))
-	;	(def getStack(name))
+    (def createPipeline (name stacks)
+        ;(ero "Creating new pipeline: " name)
+        ;(ero "with stacks: " stacks)
+        (tofile (string (pwd) defaultDir name) (each n stacks (write (list n))))
+        (prepl))
+    (def listPipelines (pipelineLocation)
+        (prn "listing pipelines")
+        (if pipelineLocation 
+            (pr (dir pipelineLocation))
+            (pr (dir defaultDir)))
+        (prepl))
+    (def getPipeline (name)
+        (fromfile (+ defaultDir name)
+            (whiler stack (read) eof
+                (let (stack-name . items) stack
+                    (prn "--- " stack-name)
+                    (each item items
+                    (prn item)))))
+        (prepl))
+    ;stacks
+    ;   (def createStack (name))
+    ;   (def getStack(name))
 
-	;items
+    ;items
 
-	(def createItem (pipeline-loc stack-name i)
-		;(prn "Stackname: " stack-name " item: " i)
-		(if i
-			(do (tofile pipeline-loc
-				(fromfile pipeline-loc
-				  (whiler stack (read) eof
-				    (let (name . items) stack
-				      (ero "checking stack " name)
-				      (when (iso name stack-name)
-				         (ero "appending")
-				        (nappend stack i))
-				      (write stack)
-				      (prn)))))
-			(prepl))
-			(ero "You didn't supply an item")))
-	;	(def getItem (nameOrId))
-	(def deleteItem (pipeline-loc stack-name d)
-		(tofile pipeline-loc
-			(fromfile pipeline-loc
-				(whiler stack (read) eof
-					(let (name . items) stack
-						(ero "checking stack " name)
-						(pull d stack)
-						(write stack)))))
-		(prepl))
+    (def createItem (pipeline-loc stack-name i)
+        ;(prn "Stackname: " stack-name " item: " i)
+        (if i
+            (do (tofile pipeline-loc
+                (fromfile pipeline-loc
+                  (whiler stack (read) eof
+                    (let (name . items) stack
+                      (ero "checking stack " name)
+                      (when (iso name stack-name)
+                         (ero "appending")
+                        (nappend stack i))
+                      (write stack)
+                      (prn)))))
+            (prepl))
+            (ero "You didn't supply an item")))
+    ;   (def getItem (nameOrId))
+    (def deleteItem (pipeline-loc stack-name d)
+        (tofile pipeline-loc
+            (fromfile pipeline-loc
+                (whiler stack (read) eof
+                    (let (name . items) stack
+                        (ero "checking stack " name)
+                        (pull d stack)
+                        (write stack)))))
+        (prepl))
 
-	;movements
-	;	(def moveItem (item))
+    ;movements
+        (def moveItem (item))
 
 (def pipelineval (expr)
     (let (command . args) (tokens expr)
-    	;(prn "command: " (car expr))
-    	;(prn "arguments: " cdr.expr)
-	    (case command
-	    	"createPipeline" (createPipeline car.args cdr.args)
-	        "listPipelines" (listPipelines car.args)
-	        "getPipeline" (getPipeline car.args)
-	        "createStack" (prn "unimplement")
-	        "getStack" (prn "unimplemented")
-	        "createItem" (createItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
-	        "getItem" (prn "unimplemented :(")
-	        "deleteItem" (deleteItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
-	        "moveItem" (prn "unimplemented :(")
+        ;(prn "command: " (car expr))
+        ;(prn "arguments: " cdr.expr)
+        (case command
+            "createPipeline" (createPipeline car.args cdr.args)
+            "listPipelines" (listPipelines car.args)
+            "getPipeline" (getPipeline car.args)
+            "createStack" (prn "unimplement")
+            "getStack" (prn "unimplemented")
+            "createItem" (createItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
+            "getItem" (prn "unimplemented :(")
+            "deleteItem" (deleteItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
+            "moveItem" (prn "unimplemented :(")
 
-	        (do (ero "command not found")
-	        (ero "usage: pipeline <command> <args>...")
-	        (prepl)))))
+            (do (ero "command not found")
+            (ero "usage: pipeline <command> <args>...")
+            (prepl)))))
 (def prepl ()
     (disp "\npipeline< ")
     (= expr (readline))
@@ -80,6 +80,6 @@
 
 (def topLevel (argv)
     (case cdr.argv
-    	nil (prepl)
-	    (pipelineval cdr.argv)))
+        nil (prepl)
+        (pipelineval cdr.argv)))
 (topLevel argv)
