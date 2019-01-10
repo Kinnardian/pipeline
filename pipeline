@@ -48,7 +48,7 @@
 				(whiler stack (read) eof
 					(let (name . items) stack
 						(ero "checking stack " name)
-						(pull [is _ d] stack)
+						(pull d stack)
 						(write stack)))))
 		(prepl))
 
