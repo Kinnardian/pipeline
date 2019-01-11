@@ -65,7 +65,7 @@
             "getStack" (prn "unimplemented")
             "createItem" (createItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
             "getItem" (prn "unimplemented :(")
-            "deleteItem" (deleteItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
+            "deleteItem" (deleteItem (+ defaultDir (args 0)) (string (intersperse  #\space cdr.args)))
             "moveItem" (moveItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
 
             (do (ero "command not found")
