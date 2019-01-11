@@ -4,22 +4,19 @@
     (def createPipeline (name stacks)
         ;(ero "Creating new pipeline: " name)
         ;(ero "with stacks: " stacks)
-        (tofile (string (pwd) defaultDir name) (each n stacks (write (list n))))
-        (prepl))
+        (tofile (string (pwd) defaultDir name) (each n stacks (write (list n)))))
     (def listPipelines (pipelineLocation)
         (prn "listing pipelines")
         (if pipelineLocation 
             (pr (dir pipelineLocation))
-            (pr (dir defaultDir)))
-        (prepl))
+            (pr (dir defaultDir))))
     (def getPipeline (name)
         (fromfile (+ defaultDir name)
             (whiler stack (read) eof
                 (let (stack-name . items) stack
                     (prn "--- " stack-name)
                     (each item items
-                    (prn item)))))
-        (prepl))
+                    (prn item))))))
     ;stacks
     ;   (def createStack (name))
     ;   (def getStack(name))
@@ -38,8 +35,7 @@
                          (ero "appending")
                         (nappend stack i))
                       (write stack)
-                      (prn)))))
-            (prepl))
+                      (prn))))))
             (ero "You didn't supply an item")))
     ;   (def getItem (nameOrId))
     (def deleteItem (pipeline-loc stack-name d)
@@ -49,8 +45,7 @@
                     (let (name . items) stack
                         (ero "checking stack " name)
                         (pull d stack)
-                        (write stack)))))
-        (prepl))
+                        (write stack))))))
 
     ;movements
         (def moveItem (item))
@@ -71,12 +66,12 @@
             "moveItem" (prn "unimplemented :(")
 
             (do (ero "command not found")
-            (ero "usage: pipeline <command> <args>...")
-            (prepl)))))
+            (ero "usage: pipeline <command> <args>...")))))
 (def prepl ()
     (disp "\npipeline< ")
     (= expr (readline))
-    (pipelineval expr))
+    (pipelineval expr)
+    (prepl))
 
 (def topLevel (argv)
     (case cdr.argv
