@@ -50,9 +50,7 @@
     ;movements
     (def moveItem (pipeline-loc to i)
         (deleteItem pipeline-loc i)
-        (prn "I run")
         (createItem pipeline-loc to i)
-        (prn "I run too")
     )
 
 (def pipelineval (expr)
