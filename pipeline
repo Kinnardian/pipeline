@@ -1,6 +1,8 @@
 #!/usr/bin/env arc
 
 (= defaultDir "./pipelines/")
+    (deftem pipeline name nil stacks nil)
+
     (def createPipeline (name stacks)
         ;(ero "Creating new pipeline: " name)
         ;(ero "with stacks: " stacks)
