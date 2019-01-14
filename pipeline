@@ -3,6 +3,9 @@
 (= defaultDir "./pipelines/")
     (deftem pipeline name nil stacks nil)
 
+    (def ncreatePipeline (name stacks)
+        (temstore 'pipeline (inst 'pipeline 'name name 'stacks stacks) (string (pwd) defaultDir name)))
+
     (def createPipeline (name stacks)
         ;(ero "Creating new pipeline: " name)
         ;(ero "with stacks: " stacks)
@@ -62,6 +65,7 @@
         ;(prn "arguments: " cdr.expr)
         (case command
             "createPipeline" (createPipeline car.args cdr.args)
+            "ncreatePipeline" (ncreatePipeline car.args cdr.args)
             "listPipelines" (listPipelines car.args)
             "getPipeline" (getPipeline car.args)
             "createStack" (prn "unimplement")
