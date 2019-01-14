@@ -22,6 +22,7 @@
     ;   (def getStack(name))
 
     ;items
+    (deftem item name nil id nil done nil)
 
     (def createItem (pipeline-loc stack-name i)
         ;(prn "Stackname: " stack-name " item: " i)
