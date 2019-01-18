@@ -1,10 +1,8 @@
 #!/usr/bin/env arc
 
-(= defaultDir "./pipelines/")
-    (deftem pipeline name nil stacks nil)
-
+(= defaultDir "pipelines/")
     (def ncreatePipeline (name stacks)
-        (temstore 'pipeline (inst 'pipeline 'name name 'stacks stacks) (string (pwd) defaultDir name)))
+        (save-file (listtab (map [list _ (list)] stacks)) (string (pwd) defaultDir name)))
 
     (def createPipeline (name stacks)
         ;(ero "Creating new pipeline: " name)
@@ -15,6 +13,8 @@
         (if pipelineLocation 
             (pr (dir pipelineLocation))
             (pr (dir defaultDir))))
+    (def ngetPipeline (name)
+        (pr (load-table (+ defaultDir name))))
     (def getPipeline (name)
         (fromfile (+ defaultDir name)
             (whiler stack (read) eof
@@ -28,6 +28,15 @@
 
     ;items
     (deftem item name nil id nil done nil)
+    
+    (def ncreateItem (pipeline-loc stack-name i)
+        (if i
+            (do 
+                (let p (load-table pipeline-loc)
+                    (ero (type p))
+                    (ero "stacks" (keys p))
+                    (push i (p stack-name))
+                    (save-table p pipeline-loc)))))
 
     (def createItem (pipeline-loc stack-name i)
         ;(prn "Stackname: " stack-name " item: " i)
@@ -68,9 +77,11 @@
             "ncreatePipeline" (ncreatePipeline car.args cdr.args)
             "listPipelines" (listPipelines car.args)
             "getPipeline" (getPipeline car.args)
+            "ngetPipeline" (ngetPipeline car.args)
             "createStack" (prn "unimplement")
             "getStack" (prn "unimplemented")
             "createItem" (createItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
+            "ncreateItem" (ncreateItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
             "getItem" (prn "unimplemented :(")
             "deleteItem" (deleteItem (+ defaultDir (args 0)) (string (intersperse  #\space cdr.args)))
             "moveItem" (moveItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
