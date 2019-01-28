@@ -1,20 +1,19 @@
 #!/usr/bin/env arc
 
 (= defaultDir "pipelines/")
-    (def ncreatePipeline (name stacks)
-        (save-file (listtab (map [list _ (list)] stacks)) (string (pwd) defaultDir name)))
-
     (def createPipeline (name stacks)
-        ;(ero "Creating new pipeline: " name)
-        ;(ero "with stacks: " stacks)
-        (tofile (string (pwd) defaultDir name) (each n stacks (write (list n)))))
+         ;(ero "Creating new pipeline: " name)
+         ;(ero "with stacks: " stacks)
+         (let  p (map [list (sym _) '(nil)] stacks)
+            (push '(seq 0) p)
+            (save-file p (string (pwd) defaultDir name))))
+
     (def listPipelines (pipelineLocation)
         (prn "listing pipelines")
         (if pipelineLocation 
             (pr (dir pipelineLocation))
             (pr (dir defaultDir))))
-    (def ngetPipeline (name)
-        (pr (load-table (+ defaultDir name))))
+
     (def getPipeline (name)
         (fromfile (+ defaultDir name)
             (whiler stack (read) eof
@@ -22,36 +21,29 @@
                     (prn "--- " stack-name)
                     (each item items
                     (prn item))))))
+
     ;stacks
     ;   (def createStack (name))
     ;   (def getStack(name))
 
-    ;items
-    (deftem item name nil id nil done nil)
-    
-    (def ncreateItem (pipeline-loc stack-name i)
-        (if i
-            (do 
-                (let p (load-table pipeline-loc)
-                    (ero (type p))
-                    (ero "stacks" (keys p))
-                    (push i (p stack-name))
-                    (save-table p pipeline-loc)))))
-
     (def createItem (pipeline-loc stack-name i)
-        ;(prn "Stackname: " stack-name " item: " i)
         (if i
-            (do (tofile pipeline-loc
-                (fromfile pipeline-loc
-                  (whiler stack (read) eof
-                    (let (name . items) stack
-                      (ero "checking stack " name)
-                      (when (iso name stack-name)
-                         (ero "appending")
-                        (nappend stack i))
-                      (write stack)
-                      (prn))))))
-            (ero "You didn't supply an item")))
+            (if stack-name 
+                (do 
+                    (tofile pipeline-loc
+                        (fromfile pipeline-loc
+                            (= p (read))
+                            (for n 1 (<= len.p) ++.n
+                              (ero "checking stack " p.n.0)
+                              (when (iso p.n.0 sym.stack-name)
+                                 (ero "appending " i " to " p.n.0)
+                                (push { id (++ p.0.1) cont i  done '(nil)} p.n.1)
+                                (write p)
+
+                                (break))
+                              (prn)))))
+                (do (ero "no stack-name")))
+            (do (ero "You didn't supply an item"))))
     ;   (def getItem (nameOrId))
     (def deleteItem (pipeline-loc d)
         (tofile pipeline-loc
