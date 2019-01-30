@@ -63,6 +63,18 @@
         (createItem pipeline-loc to i)
     )
 
+    ;Utilities
+    (def toNewPipe (oldpipe)
+        (let p (readfile (+ defaultDir oldpipe))
+            (let stacks (map [car _] p)
+                (ero "stacks: " stacks)
+                (ero "oldpipe: " oldpipe)
+                (createPipeline (+ "n" oldpipe) stacks)
+                (up s 0 (- len.p 1)
+                    (ero "filling new pipe") 
+                    (for c 1 (< c (len p.s)) ++.c
+                        (ero "bout to create item: " p.s.c)
+                        (createItem (+ defaultDir "n" oldpipe) (car p.s) p.s.c))))))
 (def pipelineval (expr)
     (let (command . args) (tokens expr)
         ;(prn "command: " (car expr))
@@ -77,7 +89,8 @@
             "getItem" (prn "unimplemented :(")
             "deleteItem" (deleteItem (+ defaultDir (args 0)) (string (intersperse  #\space cdr.args)))
             "moveItem" (moveItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
-
+            ;Utilities
+            "toNewPipe" (toNewPipe car.args)
             (do (ero "command not found")
             (ero "usage: pipeline <command> <args>...")))))
 (def prepl ()
