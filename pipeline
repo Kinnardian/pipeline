@@ -15,7 +15,7 @@
             (pr (dir defaultDir))))
 
     (def getPipeline (name)
-        (fromfile (+ defaultDir name)
+        (fromfile (+ (pwd) defaultDir name)
             (= p (read))
                 (for n 1 (<= len.p) ++.n
                     (pr p.n.0)
