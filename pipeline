@@ -17,11 +17,11 @@
     (def getPipeline (name)
         (fromfile (+ (pwd) defaultDir name)
             (= p (read))
-                (for n 1 (<= len.p) ++.n
-                    (pr p.n.0)
+                (for c 1 (<= len.p) ++.c
+                    (pr p.c.0)
                     (prn "\n____")
-                    (if p.n.1
-                        (each i p.n.1
+                    (if p.c.1
+                        (each i p.c.1
                             (if i (prn i!cont))))
                     (prn))))
 
