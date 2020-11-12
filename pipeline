@@ -17,7 +17,7 @@
     (def getPipeline (name)
         (fromfile (+ (pwd) defaultDir name)
             (= p (read))
-                (for c 1 (<= len.p) ++.c
+                (for c 1 (< len.p) ++.c
                     (pr p.c.0)
                     (prn "\n____")
                     (if p.c.1
