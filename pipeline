@@ -1,20 +1,20 @@
 #!/usr/bin/env arc
 
 (= defaultDir "pipelines/")
-    (def createPipeline (name stacks)
+    (def createPipe (name stacks)
          ;(ero "Creating new pipeline: " name)
          ;(ero "with stacks: " stacks)
          (let  p (map [list (sym _) '(nil)] stacks)
             (push '(seq 0) p)
             (save-file p (string (pwd) defaultDir name))))
 
-    (def listPipelines (pipelineLocation)
+    (def listPipes (pipeLocation)
         (prn "listing pipelines")
-        (if pipelineLocation 
-            (pr (dir pipelineLocation))
+        (if pipeLocation 
+            (pr (dir pipeLocation))
             (pr (dir defaultDir))))
 
-    (def getPipeline (name)
+    (def getPipe (name)
         (fromfile (+ (pwd) defaultDir name)
             (= p (read))
                 (for c 1 (< len.p) ++.c
@@ -29,12 +29,12 @@
     ;   (def createStack (name))
     ;   (def getStack(name))
 
-    (def createItem (pipeline-loc stack-name i)
+    (def createItem (pipe-loc stack-name i)
         (if i
             (if stack-name 
                 (do 
-                    (tofile pipeline-loc
-                        (fromfile pipeline-loc
+                    (tofile pipe-loc
+                        (fromfile pipe-loc
                             (= p (read))
                             (for n 1 (<= len.p) ++.n
                               (ero "checking stack " p.n.0)
@@ -48,9 +48,9 @@
                 (do (ero "no stack-name")))
             (do (ero "You didn't supply an item"))))
     ;   (def getItem (nameOrId))
-    (def deleteItem (pipeline-loc d)
-        (tofile pipeline-loc
-            (fromfile pipeline-loc
+    (def deleteItem (pipe-loc d)
+        (tofile pipe-loc
+            (fromfile pipe-loc
                 (whiler stack (read) eof
                     (let (name . items) stack
                         (ero "checking stack " name)
@@ -58,9 +58,9 @@
                         (write stack))))))
 
     ;movements
-    (def moveItem (pipeline-loc to i)
-        (deleteItem pipeline-loc i)
-        (createItem pipeline-loc to i)
+    (def moveItem (pipe-loc to i)
+        (deleteItem pipe-loc i)
+        (createItem pipe-loc to i)
     )
 
     ;Utilities
@@ -69,7 +69,7 @@
             (let stacks (map [car _] p)
                 (ero "stacks: " stacks)
                 (ero "oldpipe: " oldpipe)
-                (createPipeline (+ "n" oldpipe) stacks)
+                (createPipe (+ "n" oldpipe) stacks)
                 (up s 0 (- len.p 1)
                     (ero "filling new pipe") 
                     (for c 1 (< c (len p.s)) ++.c
@@ -80,9 +80,9 @@
         ;(prn "command: " (car expr))
         ;(prn "arguments: " cdr.expr)
         (case command
-            "createPipeline" (createPipeline car.args cdr.args)
-            "listPipelines" (listPipelines car.args)
-            "getPipeline" (getPipeline car.args)
+            "createPipe" (createPipe car.args cdr.args)
+            "listPipes" (listPipes car.args)
+            "getPipe" (getPipe car.args)
             "createStack" (prn "unimplement")
             "getStack" (prn "unimplemented")
             "createItem" (createItem (+ defaultDir (args 0)) (args 1) (string (intersperse  #\space (nthcdr 2 args))))
